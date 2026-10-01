@@ -1,12 +1,11 @@
 import { useState, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { AlertTriangle, Check, Copy, Loader2, RotateCcw, ShieldAlert, Sparkles as _unused, Bot } from "lucide-react";
+import { AlertTriangle, Check, Copy, Loader2, RotateCcw, ShieldAlert, Bot } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-void _unused;
 
 export const DISCLAIMER =
   "AI-generated content may contain errors or omissions. Please review and verify important information before using it for professional, academic, legal, financial, or other important decisions.";
