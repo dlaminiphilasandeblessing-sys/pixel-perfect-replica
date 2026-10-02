@@ -217,7 +217,7 @@ export const chatReply = createServerFn({ method: "POST" })
     const P = await import("./ai/prompts.server");
     return safeRun("chat", async () => {
       const last = data.messages[data.messages.length - 1];
-      if (last.role !== "user" || !last.content.trim()) throw new Error("bad input");
+      if (!last || last.role !== "user" || !last.content.trim()) throw new Error("bad input");
       return callAI({ system: P.CHAT_SYSTEM, input: data.messages.slice(-20) });
     });
   });

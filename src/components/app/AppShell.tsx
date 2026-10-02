@@ -12,7 +12,7 @@ import { NAV, NAV_SECONDARY } from "@/lib/tools";
 import { clearSession } from "@/lib/session";
 import { cn } from "@/lib/utils";
 
-function NavList({ onNavigate }: { onNavigate?: () => void }) {
+function NavList({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const item = (n: { to: string; label: string; icon: React.ElementType }) => {
     const active = n.to === "/" ? path === "/" : path.startsWith(n.to);
@@ -96,7 +96,7 @@ function ClearSessionButton() {
   );
 }
 
-function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
+function SidebarBody({ onNavigate }: { onNavigate?: (() => void) | undefined }) {
   return (
     <div className="flex h-full flex-col gap-6 p-4">
       <Brand />
