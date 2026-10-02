@@ -41,7 +41,7 @@ function ResearchPage() {
   const [thread, setThread] = useState<{ q: string; r: ResearchResult }[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [lastArgs, setLastArgs] = useState<{ q: string; prev?: string } | null>(null);
+  const [lastArgs, setLastArgs] = useState<{ q: string; prev?: string | undefined } | null>(null);
 
   useEffect(() => {
     status().then(setAvail).catch(() => setAvail({ available: false, provider: null }));
@@ -133,7 +133,7 @@ function ResearchPage() {
             <div className="flex flex-wrap gap-2">
               <CopyButton text={toText()} label="Copy research" />
               <Button variant="outline" size="sm" onClick={() => downloadText("research.txt", toText())}><Download /> Export</Button>
-              <Button variant="outline" size="sm" disabled={loading} onClick={() => { const first = thread[0].q; setThread([]); go(first); }}><RotateCcw /> Regenerate</Button>
+              <Button variant="outline" size="sm" disabled={loading} onClick={() => { const first = thread[0]!.q; setThread([]); go(first); }}><RotateCcw /> Regenerate</Button>
             </div>
           )}
           {thread.map(({ q, r }, i) => <ResearchCard key={i} q={q} r={r} followUp={i > 0} />)}
@@ -141,14 +141,14 @@ function ResearchPage() {
           {loading ? (
             <Panel><LoadingState message="Researching authorized sources…" /></Panel>
           ) : error ? (
-            <Panel><ErrorState message={error} onRetry={lastArgs ? () => go(lastArgs.q, lastArgs.prev) : undefined} /></Panel>
+            <Panel><ErrorState message={error} onRetry={lastArgs ? () => void go(lastArgs.q, lastArgs.prev) : undefined} /></Panel>
           ) : thread.length === 0 ? (
             <Panel><EmptyState icon={Globe} title="No research yet" text="Ask a question to search external sources and get a cited summary." /></Panel>
           ) : null}
 
           {thread.length > 0 && !loading && (
             <Panel title="Continue researching">
-              <form className="flex flex-col gap-2 sm:flex-row" onSubmit={(e) => { e.preventDefault(); const last = thread[thread.length - 1]; go(followUp, `${last.q}\n${last.r.summary}`); }}>
+              <form className="flex flex-col gap-2 sm:flex-row" onSubmit={(e) => { e.preventDefault(); const last = thread[thread.length - 1]!; go(followUp, `${last.q}\n${last.r.summary}`); }}>
                 <Input aria-label="Follow-up question" placeholder="Ask a follow-up question on this topic…" value={followUp} onChange={(e) => setFollowUp(e.target.value)} maxLength={1000} />
                 <Button type="submit"><CornerDownRight /> Ask follow-up</Button>
               </form>
